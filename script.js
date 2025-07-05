@@ -25,20 +25,79 @@ navLinks.forEach(link => {
 function setMinDate() {
     const dateInput = document.getElementById('date');
     const today = new Date();
+    
+    // Data mínima: amanhã
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
     
-    const formattedDate = tomorrow.toISOString().split('T')[0];
-    dateInput.min = formattedDate;
+    // Data máxima: 14 dias a partir de hoje
+    const maxDate = new Date(today);
+    maxDate.setDate(maxDate.getDate() + 14);
+    
+    const minFormattedDate = tomorrow.toISOString().split('T')[0];
+    const maxFormattedDate = maxDate.toISOString().split('T')[0];
+    
+    dateInput.min = minFormattedDate;
+    dateInput.max = maxFormattedDate;
+    
+    // Adicionar placeholder informativo
+    dateInput.placeholder = `Selecione uma data entre ${minFormattedDate} e ${maxFormattedDate}`;
+}
+
+// Sistema de banco de dados simulado (localStorage)
+const BOOKING_DB_KEY = 'barbearia_bookings';
+
+// Função para obter todos os agendamentos
+function getAllBookings() {
+    const bookings = localStorage.getItem(BOOKING_DB_KEY);
+    return bookings ? JSON.parse(bookings) : [];
+}
+
+// Função para salvar agendamento
+function saveBooking(booking) {
+    const bookings = getAllBookings();
+    booking.id = Date.now(); // ID único
+    booking.createdAt = new Date().toISOString();
+    bookings.push(booking);
+    localStorage.setItem(BOOKING_DB_KEY, JSON.stringify(bookings));
+    return booking;
+}
+
+// Função para obter agendamentos por data
+function getBookingsByDate(date) {
+    const bookings = getAllBookings();
+    return bookings.filter(booking => booking.date === date);
+}
+
+// Função para contar agendamentos por horário
+function getBookingCountByTime(date, time) {
+    const bookings = getBookingsByDate(date);
+    return bookings.filter(booking => booking.time === time).length;
 }
 
 // Validação de horário de funcionamento
 function updateTimeSlots() {
     const dateInput = document.getElementById('date');
     const timeSelect = document.getElementById('time');
-    const selectedDate = new Date(dateInput.value);
-    const dayOfWeek = selectedDate.getDay(); // 0 = Domingo, 6 = Sábado
     
+    if (!dateInput.value) return;
+    
+    const selectedDate = new Date(dateInput.value + 'T00:00:00');
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const maxDate = new Date(today);
+    maxDate.setDate(maxDate.getDate() + 14);
+    
+    // Verificar se a data está dentro do limite permitido
+    if (selectedDate < tomorrow || selectedDate > maxDate) {
+        timeSelect.innerHTML = '<option value="">Data fora do limite permitido (1-14 dias)</option>';
+        return;
+    }
+    
+    const dayOfWeek = selectedDate.getDay(); // 0 = Domingo, 6 = Sábado
+    console.log('Dia da semana:', selectedDate);
+
     // Limpar opções existentes
     timeSelect.innerHTML = '<option value="">Selecione um horário</option>';
     
@@ -54,11 +113,24 @@ function updateTimeSlots() {
         return;
     }
     
-    // Adicionar opções de horário
+    // Adicionar opções de horário com verificação de disponibilidade
     timeSlots.forEach(time => {
+        const bookingCount = getBookingCountByTime(dateInput.value, time);
         const option = document.createElement('option');
         option.value = time;
-        option.textContent = time;
+        
+        if (bookingCount >= 2) {
+            option.textContent = `${time} - Lotado (${bookingCount}/2)`;
+            option.disabled = true;
+            option.style.color = '#999';
+        } else if (bookingCount === 1) {
+            option.textContent = `${time} - 1 vaga disponível (${bookingCount}/2)`;
+            option.style.color = '#ff6b35';
+        } else {
+            option.textContent = `${time} - Disponível`;
+            option.style.color = '#28a745';
+        }
+        
         timeSelect.appendChild(option);
     });
 }
@@ -112,24 +184,62 @@ bookingForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
     const formData = new FormData(bookingForm);
+    const selectedDate = new Date(formData.get('date') + 'T00:00:00');
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const maxDate = new Date(today);
+    maxDate.setDate(maxDate.getDate() + 14);
+    
+    // Validar se a data está dentro do limite
+    if (selectedDate < tomorrow || selectedDate > maxDate) {
+        alert('Por favor, selecione uma data entre amanhã e 14 dias a partir de hoje.');
+        return;
+    }
+    
+    // Validar se não é uma data anterior
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+    if (selectedDate < todayStart) {
+        alert('Não é possível agendar para datas anteriores.');
+        return;
+    }
+    
+    const selectedTime = formData.get('time');
+    const selectedDateStr = formData.get('date');
+    
+    // Verificar disponibilidade do horário
+    const bookingCount = getBookingCountByTime(selectedDateStr, selectedTime);
+    if (bookingCount >= 2) {
+        alert('Este horário já está lotado. Por favor, escolha outro horário.');
+        return;
+    }
+    
+    const message = formData.get('message').trim();
     const bookingData = {
         name: formData.get('name'),
         phone: formData.get('phone'),
         service: formData.get('service'),
-        date: formData.get('date'),
-        time: formData.get('time'),
-        message: formData.get('message')
+        date: selectedDateStr,
+        time: selectedTime,
+        ...(message && { message })
     };
     
     try {
+        // Salvar no banco de dados
+        const savedBooking = saveBooking(bookingData);
+        
         // Simular envio para servidor
-        await submitBooking(bookingData);
+        await submitBooking(savedBooking);
         
         // Mostrar modal de sucesso
         showSuccessModal();
         
         // Limpar formulário
         bookingForm.reset();
+        
+        // Atualizar horários disponíveis
+        updateTimeSlots();
         
     } catch (error) {
         console.error('Erro ao agendar:', error);
@@ -150,9 +260,37 @@ async function submitBooking(data) {
     
     // Exemplo de envio por e-mail (requer backend)
     // await sendEmailNotification(data);
-    
+
     return { success: true };
 }
+
+// Função para visualizar todos os agendamentos (útil para testes)
+function viewAllBookings() {
+    const bookings = getAllBookings();
+    console.log('Todos os agendamentos:', bookings);
+    
+    if (bookings.length === 0) {
+        console.log('Nenhum agendamento encontrado.');
+        return;
+    }
+    
+    bookings.forEach(booking => {
+        console.log(`ID: ${booking.id} | ${booking.name} | ${booking.date} ${booking.time} | ${booking.service}`);
+    });
+}
+
+// Função para limpar todos os agendamentos (útil para testes)
+function clearAllBookings() {
+    if (confirm('Tem certeza que deseja limpar todos os agendamentos?')) {
+        localStorage.removeItem(BOOKING_DB_KEY);
+        console.log('Todos os agendamentos foram removidos.');
+        updateTimeSlots();
+    }
+}
+
+// Adicionar funções ao window para acesso via console
+window.viewAllBookings = viewAllBookings;
+window.clearAllBookings = clearAllBookings;
 
 // Mostrar modal de sucesso
 function showSuccessModal() {
@@ -276,7 +414,7 @@ function getEndTime(startTime, service) {
 // Envio de e-mail (exemplo)
 async function sendEmailNotification(bookingData) {
     const emailData = {
-        to: 'contato@barbeariaelite.com',
+        to: 'barbeariaelite86@gmail.com',
         subject: 'Novo Agendamento - Barbearia Elite',
         body: `
             Novo agendamento realizado:
