@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barbearia Elite - Seu Estilo Começa Aqui</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <h2>Barbearia Elite</h2>
+                </div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="#home" class="nav-link">Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#services" class="nav-link">Serviços</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#booking" class="nav-link">Agendar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#contact" class="nav-link">Contato</a>
+                    </li>
+                </ul>
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-background">
+            <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" alt="Barbearia Elite">
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="hero-content">
+            <h1 class="hero-title">Barbearia Elite</h1>
+            <p class="hero-subtitle">Seu estilo começa aqui</p>
+            <p class="hero-description">Onde a tradição encontra a modernidade. Cortes precisos, barbas impecáveis e um ambiente exclusivo para o homem que valoriza qualidade.</p>
+            <div class="hero-buttons">
+                <a href="#booking" class="cta-button primary">Agendar Horário</a>
+                <a href="#services" class="cta-button secondary">Ver Serviços</a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>Mais que uma barbearia</h2>
+                    <p>Na Barbearia Elite, cada corte é uma obra de arte. Nossa equipe de barbeiros experientes combina técnicas tradicionais com tendências modernas para criar looks únicos que refletem sua personalidade.</p>
+                    <p>Oferecemos um ambiente sofisticado onde você pode relaxar e sair com a confiança de quem sabe que está com a melhor aparência possível.</p>
+                    <div class="about-stats">
+                        <div class="stat">
+                            <span class="stat-number">500+</span>
+                            <span class="stat-label">Clientes Satisfeitos</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">5</span>
+                            <span class="stat-label">Anos de Experiência</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">100%</span>
+                            <span class="stat-label">Qualidade Garantida</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Barbeiro trabalhando">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="container">
+            <div class="section-header">
+                <h2>Nossos Serviços</h2>
+                <p>Serviços de qualidade para o homem moderno</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-cut"></i>
+                    </div>
+                    <h3>Corte Masculino</h3>
+                    <p>Cortes modernos e clássicos personalizados para seu tipo de cabelo e formato de rosto</p>
+                    <div class="service-details">
+                        <span class="duration"><i class="fas fa-clock"></i> 45 min</span>
+                        <span class="price">R$ 45,00</span>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <h3>Barba Completa</h3>
+                    <p>Acabamento perfeito para sua barba com técnicas profissionais de modelagem</p>
+                    <div class="service-details">
+                        <span class="duration"><i class="fas fa-clock"></i> 30 min</span>
+                        <span class="price">R$ 35,00</span>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3>Sobrancelha</h3>
+                    <p>Design e modelagem de sobrancelhas para um olhar mais definido e masculino</p>
+                    <div class="service-details">
+                        <span class="duration"><i class="fas fa-clock"></i> 20 min</span>
+                        <span class="price">R$ 25,00</span>
+                    </div>
+                </div>
+                <div class="service-card featured">
+                    <div class="service-badge">Mais Popular</div>
+                    <div class="service-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3>Corte + Barba Combo</h3>
+                    <p>Pacote completo com corte e barba para um visual renovado e profissional</p>
+                    <div class="service-details">
+                        <span class="duration"><i class="fas fa-clock"></i> 60 min</span>
+                        <span class="price">R$ 65,00</span>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-spa"></i>
+                    </div>
+                    <h3>Hidratação</h3>
+                    <p>Tratamento profundo para cabelo e barba com produtos premium</p>
+                    <div class="service-details">
+                        <span class="duration"><i class="fas fa-clock"></i> 40 min</span>
+                        <span class="price">R$ 40,00</span>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-mask"></i>
+                    </div>
+                    <h3>Black Mask</h3>
+                    <p>Tratamento facial com máscara negra para pele limpa e renovada</p>
+                    <div class="service-details">
+                        <span class="duration"><i class="fas fa-clock"></i> 35 min</span>
+                        <span class="price">R$ 50,00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="gallery">
+        <div class="container">
+            <div class="section-header">
+                <h2>Galeria de Trabalhos</h2>
+                <p>Alguns dos nossos melhores resultados</p>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Corte masculino">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1585747860715-2ba37e788b70?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Barba">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Ambiente">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Resultado">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Section -->
+    <section id="booking" class="booking">
+        <div class="container">
+            <div class="section-header">
+                <h2>Agende Seu Horário</h2>
+                <p>Reserve seu horário de forma rápida e fácil</p>
+            </div>
+            <div class="booking-container">
+                <form id="bookingForm" class="booking-form">
+                    <div class="form-group">
+                        <label for="name">Nome Completo</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Telefone</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="service">Serviço Desejado</label>
+                        <select id="service" name="service" required>
+                            <option value="">Selecione um serviço</option>
+                            <option value="corte">Corte Masculino - R$ 45,00</option>
+                            <option value="barba">Barba Completa - R$ 35,00</option>
+                            <option value="sobrancelha">Sobrancelha - R$ 25,00</option>
+                            <option value="combo">Corte + Barba Combo - R$ 65,00</option>
+                            <option value="hidratacao">Hidratação - R$ 40,00</option>
+                            <option value="blackmask">Black Mask - R$ 50,00</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Data</label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="time">Horário</label>
+                        <select id="time" name="time" required>
+                            <option value="">Selecione um horário</option>
+                            <option value="09:00">09:00</option>
+                            <option value="10:00">10:00</option>
+                            <option value="11:00">11:00</option>
+                            <option value="14:00">14:00</option>
+                            <option value="15:00">15:00</option>
+                            <option value="16:00">16:00</option>
+                            <option value="17:00">17:00</option>
+                            <option value="18:00">18:00</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Observações (opcional)</label>
+                        <textarea id="message" name="message" rows="3" placeholder="Alguma preferência específica ou observação..."></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-calendar-check"></i>
+                        Confirmar Agendamento
+                    </button>
+                </form>
+                <div class="booking-info">
+                    <h3>Informações Importantes</h3>
+                    <ul>
+                        <li><i class="fas fa-clock"></i> Segunda a Sábado: 9h às 19h</li>
+                        <li><i class="fas fa-calendar"></i> Agendamentos com 24h de antecedência</li>
+                        <li><i class="fas fa-phone"></i> Cancelamentos com 2h de antecedência</li>
+                        <li><i class="fas fa-credit-card"></i> Aceitamos PIX, cartão e dinheiro</li>
+                        <li><i class="fas fa-users"></i> Máximo 2 pessoas por horário</li>
+                    </ul>
+                    <div class="booking-contact">
+                        <h4>Precisa de ajuda?</h4>
+                        <a href="https://wa.me/5511999999999" class="whatsapp-btn">
+                            <i class="fab fa-whatsapp"></i>
+                            Falar no WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2>Entre em Contato</h2>
+                <p>Estamos aqui para você</p>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h3>Endereço</h3>
+                            <p>Rua das Barbearias, 123<br>Centro - São Paulo, SP<br>CEP: 01234-567</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h3>Horário de Funcionamento</h3>
+                            <p>Segunda a Sexta: 9h às 19h<br>Sábado: 9h às 18h<br>Domingo: Fechado</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-details">
+                            <h3>Telefone</h3>
+                            <p>(11) 99999-9999</p>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="https://wa.me/5511999999999" class="social-link whatsapp">
+                            <i class="fab fa-whatsapp"></i>
+                            <span>WhatsApp</span>
+                        </a>
+                        <a href="https://instagram.com/barbeariaelite" class="social-link instagram">
+                            <i class="fab fa-instagram"></i>
+                            <span>Instagram</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="map-container">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.1234567890123!2d-46.6388!3d-23.5505!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDMzJzAxLjgiUyA0NsKwMzgnMTkuNyJX!5e0!3m2!1spt-BR!2sbr!4v1234567890123"
+                        width="100%" 
+                        height="400" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Barbearia Elite</h3>
+                    <p>Seu estilo começa aqui. Cortes precisos, barbas impecáveis e um ambiente exclusivo para o homem que valoriza qualidade.</p>
+                    <div class="footer-social">
+                        <a href="https://instagram.com/barbeariaelite"><i class="fab fa-instagram"></i></a>
+                        <a href="https://facebook.com/barbeariaelite"><i class="fab fa-facebook"></i></a>
+                        <a href="https://wa.me/5511999999999"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Links Rápidos</h4>
+                    <ul>
+                        <li><a href="#home">Início</a></li>
+                        <li><a href="#services">Serviços</a></li>
+                        <li><a href="#booking">Agendar</a></li>
+                        <li><a href="#contact">Contato</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Serviços</h4>
+                    <ul>
+                        <li><a href="#services">Corte Masculino</a></li>
+                        <li><a href="#services">Barba Completa</a></li>
+                        <li><a href="#services">Sobrancelha</a></li>
+                        <li><a href="#services">Corte + Barba</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contato</h4>
+                    <p><i class="fas fa-phone"></i> (11) 99999-9999</p>
+                    <p><i class="fas fa-envelope"></i> contato@barbeariaelite.com</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Rua das Barbearias, 123</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Barbearia Elite. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="modal-body">
+                <i class="fas fa-check-circle success-icon"></i>
+                <h3>Agendamento Confirmado!</h3>
+                <p>Seu horário foi agendado com sucesso. Entraremos em contato para confirmar os detalhes.</p>
+                <button class="modal-btn" onclick="closeModal()">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
