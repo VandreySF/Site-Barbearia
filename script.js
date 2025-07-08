@@ -89,11 +89,6 @@ function updateTimeSlots() {
     const maxDate = new Date(today);
     maxDate.setDate(maxDate.getDate() + 14);
     
-    // Verificar se a data está dentro do limite permitido
-    if (selectedDate < tomorrow || selectedDate > maxDate) {
-        timeSelect.innerHTML = '<option value="">Data fora do limite permitido (1-14 dias)</option>';
-        return;
-    }
     
     const dayOfWeek = selectedDate.getDay(); // 0 = Domingo, 6 = Sábado
     console.log('Dia da semana:', selectedDate);
@@ -191,15 +186,11 @@ bookingForm.addEventListener('submit', async (e) => {
     const maxDate = new Date(today);
     maxDate.setDate(maxDate.getDate() + 14);
     
-    // Validar se a data está dentro do limite
-    if (selectedDate < tomorrow || selectedDate > maxDate) {
-        alert('Por favor, selecione uma data entre amanhã e 14 dias a partir de hoje.');
-        return;
-    }
     
     // Validar se não é uma data anterior
     const todayStart = new Date();
     todayStart.setHours(0, 0, 0, 0);
+    console.log('Data de hoje:', todayStart);
     if (selectedDate < todayStart) {
         alert('Não é possível agendar para datas anteriores.');
         return;
@@ -222,12 +213,17 @@ bookingForm.addEventListener('submit', async (e) => {
         service: formData.get('service'),
         date: selectedDateStr,
         time: selectedTime,
-        ...(message && { message })
+        status: 'pendente', // Status inicial
+        notes: message || '',
+        createdAt: new Date().toISOString()
     };
     
     try {
-        // Salvar no banco de dados
+        // Salvar no banco de dados local
         const savedBooking = saveBooking(bookingData);
+        
+        // Enviar dados para o gerenciamento
+        sendToManagement(savedBooking);
         
         // Simular envio para servidor
         await submitBooking(savedBooking);
@@ -246,6 +242,34 @@ bookingForm.addEventListener('submit', async (e) => {
         alert('Erro ao processar agendamento. Tente novamente.');
     }
 });
+
+// Função para enviar dados para o gerenciamento
+function sendToManagement(bookingData) {
+    // Salvar no localStorage para o gerenciamento acessar
+    const managementBookings = JSON.parse(localStorage.getItem('management_bookings') || '[]');
+    
+    // Extrair valor do serviço
+    const serviceMatch = bookingData.service.match(/R\$ (\d+)/);
+    const value = serviceMatch ? `R$ ${serviceMatch[1]},00` : 'R$ 0,00';
+    
+    const managementBooking = {
+        id: Date.now(),
+        name: bookingData.name,
+        phone: bookingData.phone,
+        service: bookingData.service,
+        date: bookingData.date,
+        time: bookingData.time,
+        status: bookingData.status,
+        value: value,
+        notes: bookingData.notes,
+        createdAt: bookingData.createdAt
+    };
+    
+    managementBookings.push(managementBooking);
+    localStorage.setItem('management_bookings', JSON.stringify(managementBookings));
+    
+    console.log('Agendamento enviado para o gerenciamento:', managementBooking);
+}
 
 // Função para enviar agendamento
 async function submitBooking(data) {
