@@ -469,6 +469,7 @@ body {
 }
 
 .gallery-item {
+    display: flex;
     overflow: hidden;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-light);
