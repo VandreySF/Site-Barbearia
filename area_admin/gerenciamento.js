@@ -71,6 +71,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Verificar se há novos agendamentos pendentes
     checkNewBookings();
+    
+    // Listener para redimensionamento da janela
+    window.addEventListener('resize', function() {
+        // Recarregar a tabela quando a janela for redimensionada
+        loadBookingsTable();
+    });
 });
 
 // Função para verificar novos agendamentos
@@ -167,6 +173,78 @@ function loadBookingsTable(filteredBookings = null) {
         `;
         return;
     }
+    
+    // Verificar se é mobile
+    const isMobile = window.innerWidth <= 768;
+    
+    if (isMobile) {
+        // Renderizar como cards para mobile
+        renderMobileCards(data, tableBody);
+    } else {
+        // Renderizar como tabela para desktop
+        renderDesktopTable(data, tableBody);
+    }
+}
+
+// Renderizar cards para mobile
+function renderMobileCards(data, container) {
+    container.innerHTML = '';
+    
+    data.forEach(booking => {
+        const card = document.createElement('div');
+        card.className = 'booking-card';
+        card.innerHTML = `
+            <div class="card-header">
+                <div class="client-info">
+                    <h4>${booking.name}</h4>
+                    <p class="phone">${booking.phone}</p>
+                </div>
+                <span class="status-badge status-${booking.status}">${getStatusText(booking.status)}</span>
+            </div>
+            <div class="card-body">
+                <div class="booking-details">
+                    <div class="detail-item">
+                        <i class="fas fa-cut"></i>
+                        <span>${booking.service}</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-calendar"></i>
+                        <span>${formatDate(booking.date)}</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-clock"></i>
+                        <span>${booking.time}</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-dollar-sign"></i>
+                        <span>${booking.value}</span>
+                    </div>
+                    ${booking.notes ? `
+                    <div class="detail-item">
+                        <i class="fas fa-comment"></i>
+                        <span>${booking.notes}</span>
+                    </div>
+                    ` : ''}
+                </div>
+            </div>
+            <div class="card-actions">
+                <button class="btn-icon btn-edit" onclick="editBooking(${booking.id})" title="Editar">
+                    <i class="fas fa-edit"></i>
+                    <span>Editar</span>
+                </button>
+                <button class="btn-icon btn-delete" onclick="deleteBooking(${booking.id})" title="Excluir">
+                    <i class="fas fa-trash"></i>
+                    <span>Excluir</span>
+                </button>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+// Renderizar tabela para desktop
+function renderDesktopTable(data, tableBody) {
+    tableBody.innerHTML = '';
     
     data.forEach(booking => {
         const row = document.createElement('tr');
@@ -279,8 +357,20 @@ function deleteBooking(id) {
     showConfirmModal(
         `Tem certeza que deseja excluir o agendamento de ${booking.name}?`,
         () => {
+            // Remover do array local
             bookings = bookings.filter(b => b.id !== id);
             saveBookingsToStorage();
+            
+            // Remover também do localStorage principal para liberar o horário
+            const mainBookings = JSON.parse(localStorage.getItem('barbearia_bookings') || '[]');
+            const updatedMainBookings = mainBookings.filter(b => 
+                !(b.name === booking.name && 
+                  b.phone === booking.phone && 
+                  b.date === booking.date && 
+                  b.time === booking.time)
+            );
+            localStorage.setItem('barbearia_bookings', JSON.stringify(updatedMainBookings));
+            
             loadBookingsTable();
             loadDashboardStats();
             showMessage('Agendamento excluído com sucesso!', 'success');
@@ -304,19 +394,54 @@ function handleBookingSubmit(e) {
     };
     
     // Extrair valor do serviço
-    const serviceMatch = bookingData.service.match(/R\$ (\d+)/);
-    const value = serviceMatch ? `R$ ${serviceMatch[1]},00` : 'R$ 0,00';
+    const serviceMatch = bookingData.service.match(/R\$\s?(\d{1,3})(?:[,.](\d{2}))?/);
+    let value;
+    if (serviceMatch) {
+        const reais = serviceMatch[1];
+        const centavos = serviceMatch[2] ? serviceMatch[2] : '00';
+        value = `R$ ${reais},${centavos}`;
+    } else {
+        value = 'R$ 0,00';
+    }
     
     if (currentEditId) {
         // Editar agendamento existente
         const index = bookings.findIndex(b => b.id === currentEditId);
         if (index !== -1) {
+            const oldBooking = bookings[index];
             bookings[index] = {
                 ...bookings[index],
                 ...bookingData,
                 value
             };
             saveBookingsToStorage();
+            
+            // Sincronizar com o localStorage principal
+            const mainBookings = JSON.parse(localStorage.getItem('barbearia_bookings') || '[]');
+            
+            // Remover o agendamento antigo
+            const updatedMainBookings = mainBookings.filter(b => 
+                !(b.name === oldBooking.name && 
+                  b.phone === oldBooking.phone && 
+                  b.date === oldBooking.date && 
+                  b.time === oldBooking.time)
+            );
+            
+            // Adicionar o agendamento atualizado
+            const updatedBooking = {
+                name: bookingData.name,
+                phone: bookingData.phone,
+                service: bookingData.service,
+                date: bookingData.date,
+                time: bookingData.time,
+                status: bookingData.status,
+                notes: bookingData.notes,
+                createdAt: oldBooking.createdAt || new Date().toISOString()
+            };
+            updatedMainBookings.push(updatedBooking);
+            
+            localStorage.setItem('barbearia_bookings', JSON.stringify(updatedMainBookings));
+            
             showMessage('Agendamento atualizado com sucesso!', 'success');
         }
     } else {
