@@ -66,10 +66,13 @@ Site barbearia/
 ---
 
 ## Como Rodar
-
+Opção 1:
 1. Baixe ou clone o projeto.
 2. Abra o arquivo `index.html` no navegador para acessar o site principal.
 3. Para acessar a ‘área admin’ o administrador deve rolar a página até encontrar ‘Links rápidos’.
+
+Opção 2:
+Basta entrar no link https://vandreysf.github.io/Site-Barbearia/index.html
 
 **Para testar como admin, use:**
 - Usuário: `admin`
