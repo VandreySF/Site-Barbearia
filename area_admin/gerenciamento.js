@@ -6,54 +6,6 @@ function loadBookingsFromStorage() {
     const storedBookings = localStorage.getItem('management_bookings');
     if (storedBookings) {
         bookings = JSON.parse(storedBookings);
-    } else {
-        // Dados simulados para demonstração (apenas se não houver dados no localStorage)
-        bookings = [
-            {
-                id: 1,
-                name: "João Silva",
-                phone: "(11) 99999-1111",
-                service: "Corte Masculino - R$ 45,00",
-                date: "2024-01-15",
-                time: "14:00",
-                status: "confirmado",
-                value: "R$ 45,00",
-                notes: "Cliente preferencial"
-            },
-            {
-                id: 2,
-                name: "Pedro Santos",
-                phone: "(11) 99999-2222",
-                service: "Corte + Barba Combo - R$ 65,00",
-                date: "2024-01-15",
-                time: "15:00",
-                status: "pendente",
-                value: "R$ 65,00",
-                notes: ""
-            },
-            {
-                id: 3,
-                name: "Carlos Oliveira",
-                phone: "(11) 99999-3333",
-                service: "Barba Completa - R$ 35,00",
-                date: "2024-01-16",
-                time: "10:00",
-                status: "concluido",
-                value: "R$ 35,00",
-                notes: "Primeira vez"
-            },
-            {
-                id: 4,
-                name: "Lucas Costa",
-                phone: "(11) 99999-4444",
-                service: "Sobrancelha - R$ 25,00",
-                date: "2024-01-16",
-                time: "11:00",
-                status: "cancelado",
-                value: "R$ 25,00",
-                notes: "Cancelado pelo cliente"
-            }
-        ];
     }
 }
 
