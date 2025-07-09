@@ -292,34 +292,13 @@ function editBooking(id) {
     // Preencher formulário
     document.getElementById('modalName').value = booking.name;
     document.getElementById('modalPhone').value = booking.phone;
+    // Preencher o select com nome|valor
     document.getElementById('modalService').value = `${booking.service}|${booking.value}`;
     document.getElementById('modalStatus').value = booking.status;
     document.getElementById('modalDate').value = booking.date;
     document.getElementById('modalTime').value = booking.time;
     document.getElementById('modalNotes').value = booking.notes || '';
-
-    // Desabilitar campos se status for concluido
-    const disableFields = booking.status === 'concluido';
-    document.getElementById('modalName').disabled = disableFields;
-    document.getElementById('modalPhone').disabled = disableFields;
-    document.getElementById('modalService').disabled = disableFields;
-    document.getElementById('modalDate').disabled = disableFields;
-    document.getElementById('modalTime').disabled = disableFields;
-    document.getElementById('modalNotes').disabled = disableFields;
-    // O status sempre habilitado
-    document.getElementById('modalStatus').disabled = false;
-
-    // Ao mudar o status, reabilitar/desabilitar campos dinamicamente
-    document.getElementById('modalStatus').onchange = function() {
-        const isConcluido = this.value === 'concluido';
-        document.getElementById('modalName').disabled = isConcluido;
-        document.getElementById('modalPhone').disabled = isConcluido;
-        document.getElementById('modalService').disabled = isConcluido;
-        document.getElementById('modalDate').disabled = isConcluido;
-        document.getElementById('modalTime').disabled = isConcluido;
-        document.getElementById('modalNotes').disabled = isConcluido;
-    };
-
+    
     openModal();
 }
 
