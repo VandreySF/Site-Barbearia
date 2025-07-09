@@ -6,7 +6,7 @@ function loadBookingsFromStorage() {
     const storedBookings = localStorage.getItem('management_bookings');
     if (storedBookings) {
         bookings = JSON.parse(storedBookings);
-    }
+    } 
 }
 
 let currentEditId = null;
