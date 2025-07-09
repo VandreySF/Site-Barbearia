@@ -72,7 +72,7 @@ Opção 1:
 3. Para acessar a ‘área admin’ o administrador deve rolar a página até encontrar ‘Links rápidos’.
 
 Opção 2:
-Basta entrar no link https://vandreysf.github.io/Site-Barbearia/index.html
+- **Basta entrar no link** https://vandreysf.github.io/Site-Barbearia/index.html
 
 **Para testar como admin, use:**
 - Usuário: `admin`
