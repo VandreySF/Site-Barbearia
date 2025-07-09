@@ -65,20 +65,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Remember me functionality
-    rememberCheckbox.addEventListener('change', function() {
-        if (this.checked) {
-            localStorage.setItem('rememberUser', 'true');
-        } else {
-            localStorage.removeItem('rememberUser');
-        }
-    });
-
-    // Check if user was remembered
-    if (localStorage.getItem('rememberUser') === 'true') {
-        rememberCheckbox.checked = true;
-    }
-
     // Show message function
     function showMessage(message, type) {
         // Remove existing messages
