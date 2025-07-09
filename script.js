@@ -186,6 +186,8 @@ bookingForm.addEventListener('submit', async (e) => {
     const maxDate = new Date(today);
     maxDate.setDate(maxDate.getDate() + 14);
     
+    // Separar nome do serviço e valor
+    const [serviceName, serviceValue] = formData.get('service').split('|');
     
     // Validar se não é uma data anterior
     const todayStart = new Date();
@@ -210,7 +212,8 @@ bookingForm.addEventListener('submit', async (e) => {
     const bookingData = {
         name: formData.get('name'),
         phone: formData.get('phone'),
-        service: formData.get('service'),
+        service: serviceName.trim(), // Apenas o nome
+        value: serviceValue ? serviceValue.trim() : '', // Apenas o valor
         date: selectedDateStr,
         time: selectedTime,
         status: 'pendente', // Status inicial
@@ -248,19 +251,15 @@ function sendToManagement(bookingData) {
     // Salvar no localStorage para o gerenciamento acessar
     const managementBookings = JSON.parse(localStorage.getItem('management_bookings') || '[]');
     
-    // Extrair valor do serviço
-    const serviceMatch = bookingData.service.match(/R\$ (\d+)/);
-    const value = serviceMatch ? `R$ ${serviceMatch[1]},00` : 'R$ 0,00';
-    
     const managementBooking = {
         id: Date.now(),
         name: bookingData.name,
         phone: bookingData.phone,
-        service: bookingData.service,
+        service: bookingData.service, // só o nome
         date: bookingData.date,
         time: bookingData.time,
         status: bookingData.status,
-        value: value,
+        value: bookingData.value, // só o valor
         notes: bookingData.notes,
         createdAt: bookingData.createdAt
     };
@@ -278,12 +277,6 @@ async function submitBooking(data) {
     
     // Aqui você pode integrar com sua API ou serviço de e-mail
     console.log('Dados do agendamento:', data);
-    
-    // Exemplo de integração com Google Calendar (requer configuração adicional)
-    // await addToGoogleCalendar(data);
-    
-    // Exemplo de envio por e-mail (requer backend)
-    // await sendEmailNotification(data);
 
     return { success: true };
 }

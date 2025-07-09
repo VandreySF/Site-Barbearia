@@ -292,7 +292,8 @@ function editBooking(id) {
     // Preencher formulário
     document.getElementById('modalName').value = booking.name;
     document.getElementById('modalPhone').value = booking.phone;
-    document.getElementById('modalService').value = booking.service;
+    // Preencher o select com nome|valor
+    document.getElementById('modalService').value = `${booking.service}|${booking.value}`;
     document.getElementById('modalStatus').value = booking.status;
     document.getElementById('modalDate').value = booking.date;
     document.getElementById('modalTime').value = booking.time;
@@ -335,26 +336,18 @@ function handleBookingSubmit(e) {
     e.preventDefault();
     
     const formData = new FormData(e.target);
+    // Separar nome do serviço e valor
+    const [serviceName, serviceValue] = formData.get('service').split('|');
     const bookingData = {
         name: formData.get('name'),
         phone: formData.get('phone'),
-        service: formData.get('service'),
+        service: serviceName ? serviceName.trim() : '',
+        value: serviceValue ? serviceValue.trim() : '',
         status: formData.get('status'),
         date: formData.get('date'),
         time: formData.get('time'),
         notes: formData.get('notes')
     };
-    
-    // Extrair valor do serviço
-    const serviceMatch = bookingData.service.match(/R\$\s?(\d{1,3})(?:[,.](\d{2}))?/);
-    let value;
-    if (serviceMatch) {
-        const reais = serviceMatch[1];
-        const centavos = serviceMatch[2] ? serviceMatch[2] : '00';
-        value = `R$ ${reais},${centavos}`;
-    } else {
-        value = 'R$ 0,00';
-    }
     
     if (currentEditId) {
         // Editar agendamento existente
@@ -363,14 +356,11 @@ function handleBookingSubmit(e) {
             const oldBooking = bookings[index];
             bookings[index] = {
                 ...bookings[index],
-                ...bookingData,
-                value
+                ...bookingData
             };
             saveBookingsToStorage();
-            
             // Sincronizar com o localStorage principal
             const mainBookings = JSON.parse(localStorage.getItem('barbearia_bookings') || '[]');
-            
             // Remover o agendamento antigo
             const updatedMainBookings = mainBookings.filter(b => 
                 !(b.name === oldBooking.name && 
@@ -378,12 +368,12 @@ function handleBookingSubmit(e) {
                   b.date === oldBooking.date && 
                   b.time === oldBooking.time)
             );
-            
             // Adicionar o agendamento atualizado
             const updatedBooking = {
                 name: bookingData.name,
                 phone: bookingData.phone,
                 service: bookingData.service,
+                value: bookingData.value,
                 date: bookingData.date,
                 time: bookingData.time,
                 status: bookingData.status,
@@ -391,9 +381,7 @@ function handleBookingSubmit(e) {
                 createdAt: oldBooking.createdAt || new Date().toISOString()
             };
             updatedMainBookings.push(updatedBooking);
-            
             localStorage.setItem('barbearia_bookings', JSON.stringify(updatedMainBookings));
-            
             showMessage('Agendamento atualizado com sucesso!', 'success');
         }
     } else {
@@ -401,7 +389,6 @@ function handleBookingSubmit(e) {
         showMessage('Novos agendamentos devem ser feitos através do site principal.', 'error');
         return;
     }
-    
     closeModal();
     loadBookingsTable();
     loadDashboardStats();
